@@ -1,0 +1,74 @@
+---
+title: "okumayazmaistanbul"
+format: html
+editor: visual
+---
+
+# İstanbul İlçelere Göre Okuma Yazma:
+
+```{r}
+library(readxl)
+okuma_yazma_bilen_bilmeyen_kii_saylar <- read_excel("Downloads/okuma-yazma-bilen-bilmeyen-kii-saylar.xlsx")
+View(okuma_yazma_bilen_bilmeyen_kii_saylar)
+```
+
+```{r}
+veri <- readxl::read_excel("Downloads/okuma-yazma-bilen-bilmeyen-kii-saylar.xlsx")
+library(ggplot2)
+colnames(veri) <- c("Ilce", "OkumaYazmaBilen", "OkumaYazmaBilmeyen")
+
+ggplot(veri, aes(x = Ilce, y = OkumaYazmaBilen)) +
+  geom_bar(stat = "identity", fill = "blue", alpha = 0.7) +
+  labs(title = "Okuma Yazma Bilme Durumu", x = "İlçe", y = "Kişi Sayısı")
+
+
+```
+
+```{r}
+ggplot(veri, aes(x = Ilce, y = OkumaYazmaBilmeyen)) +
+  geom_bar(stat = "identity", fill = "red", alpha = 0.7) +
+  labs(title = "Okuma Yazma Bilmeyen Durumu", x = "İlçe", y = "Kişi Sayısı")
+```
+
+```{r}
+library(naniar)
+vis_miss(veri)
+print(vis_miss(veri))
+
+```
+
+![](http://127.0.0.1:9677/graphics/71ff979e-cae9-4bac-b151-fc4fef2f2f40.png)
+
+## Herhangi bir kayıp veri bulunmamakta.
+
+```{r}
+print(veri)
+```
+
+```{r}
+veri$OkumaYazmaBilen[veri$Ilce == "Sarıyer"] <- NA
+print(veri)
+```
+
+```{r}
+vis_miss(veri)
+print(vis_miss(veri))
+
+```
+
+```{r}
+
+ortalamadoldur <- mean(veri$OkumaYazmaBilen, na.rm = TRUE)
+veri$OkumaYazmaBilen[is.na(veri$OkumaYazmaBilen)] <- ortalamadoldur
+
+```
+
+```{r}
+print(veri)
+```
+
+```{r}
+vis_miss(veri)
+print(vis_miss(veri))
+
+```
